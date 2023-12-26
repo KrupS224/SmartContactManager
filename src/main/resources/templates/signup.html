@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::layout(~{::section})}">
+<head>
+  <meta charset="UTF-8">
+  <title>This is singup page</title>
+</head>
+<body>
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="my-card mt-3">
+          <div th:if="${session.message}" th:classappend="${session.message.type}" class="alert alert-dismissible fade show" role="alert">
+            <p th:text="${session.message.content}"></p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          <h1 class="text-center">Register Here!!</h1>
+          <form novalidate th:action="@{/register}" method="post" th:object="${user}">
+            <!-- Name -->
+            <div class="mb-3">
+              <label for="name" class="form-label">Your Name</label>
+              <input th:value="${user.name}" name="name" type="text" class="form-control" th:classappend="${#fields.hasErrors('name') ? 'is-invalid' : ''}" id="name" placeholder="Enter Your Name" required>
+              <div class="invalid-feedback" th:each="e : ${#fields.errors('name')}" th:text="${e}"></div>
+            </div>
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Your Email</label>
+              <input th:value="${user.email}" name="email" type="email" class="form-control" id="email" placeholder="Enter Your Email" required>
+            </div>
+            <!-- Password -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" name="password" class="form-control" id="password" placeholder="Enter Your Password" required>
+            </div>
+            <!-- About -->
+            <div class="form-group mb-3">
+              <label for="about" class="form-label">About Yourself</label>
+              <textarea th:text="${user.about}" name="about" placeholder="Enter something about yourself!!" id="about" rows="10" class="form-control"></textarea>
+            </div>
+            <!-- Terms and Conditions -->
+            <div class="form-group form-check mb-3">
+              <input type="checkbox" name="agreement" id="agreement" class="form-check-input">
+              <label for="agreement" class="form-label">Accept Terms and Conditions</label>
+            </div>
+            <!-- Buttons -->
+            <div class="container text-center">
+              <button type="submit" class="btn bg-primary text-white">Submit</button>
+              <button type="reset" class="btn btn-warning">Reset</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>
