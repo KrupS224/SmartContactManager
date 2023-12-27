@@ -40,6 +40,13 @@ public class HomeController {
         return "signup";
     }
 
+    @GetMapping("/login")
+    public String login(Model model) {
+        model.addAttribute("title", "Login Here");
+        model.addAttribute("user", new User());
+        return "login";
+    }
+
     @PostMapping("/register")
     public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult errorResult, @RequestParam(value = "agreement", defaultValue = "false") boolean agreement, Model model, HttpSession session) {
         try {
