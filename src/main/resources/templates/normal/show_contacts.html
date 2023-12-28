@@ -14,7 +14,7 @@
       <div class="card border-primary mb-3 col-md-10 offset-md-1" th:each="contact : ${contacts}">
         <div class="row g-0">
           <div class="col-md-4 border-primary">
-            <img src="" th:src="${contact.image}" class="img-fluid rounded-start card-img-top" alt="Contact Image">
+            <img src="" th:src="@{${contact.image != null ? '/image/' + contact.image : 'https://www.seekpng.com/png/detail/966-9665493_my-profile-icon-blank-profile-image-circle.png'}}" style="width: 100%; height: auto;" class="img-fluid rounded-start card-img-top" alt="Contact Image">
           </div>
           <div class="col-md-8 border-primary">
             <div class="card-body">

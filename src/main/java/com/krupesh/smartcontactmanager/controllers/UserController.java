@@ -61,9 +61,9 @@ public class UserController {
             contact.setUserId(user.getId());
 
             if(!img.isEmpty()) {
+                contact.setImage(img.getOriginalFilename());
                 File saveImg = new ClassPathResource("static/image").getFile();
                 Path imgPath = Paths.get(saveImg.getAbsolutePath() + File.separator + img.getOriginalFilename());
-                contact.setImage(String.valueOf(imgPath));
                 Files.copy(img.getInputStream(), imgPath, StandardCopyOption.REPLACE_EXISTING);
             }
 
@@ -86,11 +86,6 @@ public class UserController {
         User user = this.userRepository.findUserByEmail(principal.getName());
         Pageable pageable = PageRequest.of(page, 5);
         Page<Contact> contacts = this.contactRepository.findByUserId(user.getId(), pageable);
-        contacts.forEach(contact -> {
-            if(contact.getImage() == null) {
-                contact.setImage("https://www.seekpng.com/png/detail/966-9665493_my-profile-icon-blank-profile-image-circle.png");
-            }
-        });
 
         model.addAttribute("contacts", contacts);
         model.addAttribute("page", page);
