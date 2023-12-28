@@ -1,5 +1,7 @@
 package com.krupesh.smartcontactmanager.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -44,7 +46,6 @@ public class Contact {
     @Length(max = 1000, message = "Description length should not exceed 1000 characters")
     private String description;
 
-    @DBRef
-    private User user;
-
+    @JsonBackReference
+    private ObjectId userId;
 }

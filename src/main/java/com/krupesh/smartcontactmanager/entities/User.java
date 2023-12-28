@@ -1,5 +1,7 @@
 package com.krupesh.smartcontactmanager.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.validation.constraints.*;
 
 import lombok.*;
@@ -48,7 +50,6 @@ public class User {
     @Length(max = 500, message = "About length should not exceed 500 characters")
     private String about;
 
-    @DBRef
-    @Field(targetType = FieldType.OBJECT_ID)
-    private List<Contact> contacts = new ArrayList<>();
+    @JsonManagedReference // stopping infinite loop
+    private List<ObjectId> contactIds = new ArrayList<>();
 }
