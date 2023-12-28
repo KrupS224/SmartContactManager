@@ -91,6 +91,7 @@ body{
     right: 35px;
     font-size: 36px;
     cursor: pointer;
+    z-index: 99999999999999999999999999;
 }
 
 .content #horiBars {
