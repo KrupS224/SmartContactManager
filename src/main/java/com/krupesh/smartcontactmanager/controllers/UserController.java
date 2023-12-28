@@ -9,6 +9,9 @@ import jakarta.servlet.http.HttpSession;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -81,8 +84,8 @@ public class UserController {
         model.addAttribute("title", "View Contacts");
 
         User user = this.userRepository.findUserByEmail(principal.getName());
-//        List<Contact> contacts = user.getContacts();
-        List<Contact> contacts = this.contactRepository.findByUserId(user.getId());
+        Pageable pageable = PageRequest.of(page, 5);
+        Page<Contact> contacts = this.contactRepository.findByUserId(user.getId(), pageable);
         contacts.forEach(contact -> {
             if(contact.getImage() == null) {
                 contact.setImage("https://www.seekpng.com/png/detail/966-9665493_my-profile-icon-blank-profile-image-circle.png");
@@ -90,6 +93,8 @@ public class UserController {
         });
 
         model.addAttribute("contacts", contacts);
+        model.addAttribute("page", page);
+        model.addAttribute("totalPages", contacts.getTotalPages());
         return "normal/show_contacts";
     }
 

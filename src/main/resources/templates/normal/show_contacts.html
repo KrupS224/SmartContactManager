@@ -33,17 +33,15 @@
 
       <!-- Pagination -->
       <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" th:classappend="${page == 0} ? 'disabled' : ''">
+            <a class="page-link" th:href="@{'/user/show-contacts/' + ${page-1}}" aria-label="Previous">
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
+          <li th:classappend="${page == i-1 ? 'active' : ''}" th:each="i : ${#numbers.sequence(1, totalPages)}" class="page-item"><a class="page-link" th:href="@{'/user/show-contacts/' + ${i-1}}" th:text="${i}"></a></li>
+          <li class="page-item" th:classappend="${page+1 != totalPages ? '' : 'disabled'}">
+            <a class="page-link" th:href="@{'/user/show-contacts/' + ${page+1}}" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
             </a>
           </li>
