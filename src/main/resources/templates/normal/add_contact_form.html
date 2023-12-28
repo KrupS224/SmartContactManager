@@ -12,24 +12,14 @@
       <div class="container-fluid mt-1">
         <div class="row">
           <div class="col-md-10 offset-md-1">
-            <form th:action="@{user/process-contact}" th:object="${contact}" enctype="multipart/form-data" method="post" class="mt-2">
-              <!-- First Name -->
+            <form th:action="@{/user/process-contact}" th:object="${contact}" enctype="multipart/form-data" method="post" class="mt-2">
+              <!-- First Name and Second Name-->
               <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <div class="input-group-text" style="height: 38px;">
-                    <i class="fa fa-user"></i>
-                  </div>
+                <div class="input-group-text" style="height: 38px;">
+                  <i class="fa fa-user"></i>
                 </div>
-                <input type="text" id="firstName" name="name" placeholder="Enter First Name" class="form-control"/>
-              </div>
-              <!-- Second Name -->
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <div class="input-group-text" style="height: 38px;">
-                    <i class="fa fa-user"></i>
-                  </div>
-                </div>
-                <input type="text" id="secondName" name="secondName" placeholder="Enter Last Name" class="form-control"/>
+                <input type="text" id="firstName" name="name" placeholder="Enter First Name" class="form-control" required>
+                <input type="text" id="secondName" name="secondName" placeholder="Enter Last Name" class="form-control">
               </div>
               <!-- Phone Number -->
               <div class="input-group mb-3">
@@ -38,7 +28,7 @@
                     <i class="fa fa-phone"></i>
                   </div>
                 </div>
-                <input type="tel" id="phone" name="phone" placeholder="Enter Phone Number Here" class="form-control" pattern="[+]{1}[0-9]{11,14}"/>
+                <input type="tel" id="phone" name="phone" placeholder="Enter Phone Number Here" class="form-control" pattern="[+]{1}[0-9]{11,14}" required/>
               </div>
               <!-- Email -->
               <div class="input-group mb-3">
@@ -60,11 +50,11 @@
               </div>
               <!-- Description -->
               <div class="form-group mb-3">
-                <textarea name="description" id="description" cols="30" rows="10" class="form-control" placeholder="Enter description about the person"></textarea>
+                <textarea name="description" id="mytextarea" cols="30" rows="10" class="form-control" placeholder="Enter description about the person"></textarea>
               </div>
               <!-- Image -->
               <div class="custom-file mb-3">
-                <input type="file" name="image">
+                <input type="file" name="profileImg">
               </div>
               <!-- Submit Button -->
               <div class="container text-center mb-3">
@@ -76,6 +66,12 @@
       </div>
     </div>
   </div>
+  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+  <script>
+    tinymce.init({
+      selector: '#mytextarea'
+    });
+  </script>
 </section>
 </body>
 </html>

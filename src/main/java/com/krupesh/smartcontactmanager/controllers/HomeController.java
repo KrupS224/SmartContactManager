@@ -60,8 +60,6 @@ public class HomeController {
                 throw new Exception("You have not agreed terms and conditions");
             }
 
-            System.out.println("User: " + user);
-
             user.setEnabled(true);
             user.setRoll("USER");
             user.setPassword(passwordEncoder.encode(user.getPassword()));

@@ -43,6 +43,7 @@
   </div>
 </nav>
 
+<!--Sidebar-->
 <div class="sidebar mt-2">
   <span onclick="toggleSidebar()" class="crossBtn">&times;</span>
   <a th:href="@{/user/profile}" class="item"><i class="fas fa-home"></i> Your Profile </a>
@@ -54,7 +55,15 @@
 </div>
 
 <div class="content mt-5">
-  <i onclick="toggleSidebar()" id="horiBars" class="fas fa-bars m-2"></i>
+  <i onclick="toggleSidebar()" id="horiBars" class="fas fa-bars m-3"></i>
+  <div class="card col-md-10 offset-md-1" th:if="${session.message}" style="background: #e2e2e2; border: none;">
+    <div class="alert alert-dismissible fade show" role="alert" th:classappend="${session.message.type}">
+      <p th:text="${session.message.content}"></p>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <th:block th:text="${@sessionHelper.removeMessageFromSession()}"></th:block>
+  </div>
+
   <div th:replace="${content}" class="m-2"></div>
 </div>
 
