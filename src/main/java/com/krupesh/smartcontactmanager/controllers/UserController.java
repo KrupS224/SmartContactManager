@@ -68,7 +68,7 @@ public class UserController {
             }
 
             this.contactRepository.insert(contact);
-            user.getContactIds().add(contact.getCID());
+            user.getContactIds().add(contact.getContactId());
             this.userRepository.save(user);
 
             session.setAttribute("message", new Message("Contact added successfully", "alert-success"));
@@ -91,6 +91,20 @@ public class UserController {
         model.addAttribute("page", page);
         model.addAttribute("totalPages", contacts.getTotalPages());
         return "normal/show_contacts";
+    }
+
+    @GetMapping("/contact/{cID}")
+    public String showContactDetails(@PathVariable("cID") ObjectId cID, Model model, Principal principal) {
+        Contact contact = this.contactRepository.findByContactId(cID);
+        User user = this.userRepository.findUserByEmail(principal.getName());
+
+//        System.out.println("User: " + user.getId() + ", Contact: " + contact.getUserId());
+        if(contact == null || !contact.getUserId().toString().equals(user.getId().toString())) {
+            return "redirect:/user/show-contacts/0";
+        }
+        model.addAttribute("title", contact.getName() + "'s Contact Details");
+        model.addAttribute("contact", contact);
+        return "normal/show_contact_details";
     }
 
 }

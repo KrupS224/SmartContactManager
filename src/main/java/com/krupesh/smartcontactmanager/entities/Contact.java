@@ -9,20 +9,17 @@ import lombok.*;
 import org.bson.types.ObjectId;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.FieldType;
 
-@Setter
 @Getter
+@Setter
 @Document(collection = "contacts")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Contact {
     @Id
-    private ObjectId cID;
+    private ObjectId contactId;
 
     @NotBlank(message = "Name cannot be blank")
     @Size(min = 2, max = 30, message = "Name size should be between 2 to 30 characters")

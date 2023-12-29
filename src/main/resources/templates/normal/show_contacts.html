@@ -25,7 +25,7 @@
               <p class="card-text" th:text="${contact.work != '' ? 'Work: ' + contact.work : ''}"></p>
               <p class="card-text" th:text="${contact.description != '' ? 'Description: ' + contact.description : ''}" style="font-style: italic; color: #555;"></p>
               <button class="btn btn-danger btn-md">Delete</button>
-              <button class="btn btn-primary btn-md">Update</button>
+              <a th:href="@{'/user/contact/' + ${contact.contactId}}"><button class="btn btn-outline-primary btn-md">View Details</button></a>
             </div>
           </div>
         </div>
