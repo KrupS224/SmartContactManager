@@ -18,13 +18,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -60,7 +58,7 @@ public class UserController {
             User user = this.userRepository.findUserByEmail(principal.getName());
             contact.setUserId(user.getId());
 
-            if(!img.isEmpty()) {
+            if (!img.isEmpty()) {
                 contact.setImage(img.getOriginalFilename());
                 File saveImg = new ClassPathResource("static/image").getFile();
                 Path imgPath = Paths.get(saveImg.getAbsolutePath() + File.separator + img.getOriginalFilename());
@@ -80,16 +78,25 @@ public class UserController {
     }
 
     @GetMapping("/show-contacts/{page}")
-    public String showContacts(@PathVariable Integer page, Model model, Principal principal){
+    public String showContacts(@PathVariable Integer page, Model model, Principal principal) {
         model.addAttribute("title", "View Contacts");
 
         User user = this.userRepository.findUserByEmail(principal.getName());
         Pageable pageable = PageRequest.of(page, 5);
         Page<Contact> contacts = this.contactRepository.findByUserId(user.getId(), pageable);
 
+        if (page > contacts.getTotalPages() - 1) {
+            if(contacts.isEmpty()){
+                model.addAttribute("noContacts", true);
+                return "normal/show_contacts";
+            }
+            return "redirect:/user/show-contacts/0";
+        }
+
+//        System.out.println("Page: " + page + ", totalPages: " + contacts.getTotalPages());
         model.addAttribute("contacts", contacts);
         model.addAttribute("page", page);
-        model.addAttribute("totalPages", contacts.getTotalPages());
+        model.addAttribute("totalPages", contacts.getTotalPages() - 1);
         return "normal/show_contacts";
     }
 
@@ -99,7 +106,7 @@ public class UserController {
         User user = this.userRepository.findUserByEmail(principal.getName());
 
 //        System.out.println("User: " + user.getId() + ", Contact: " + contact.getUserId());
-        if(contact == null || !contact.getUserId().toString().equals(user.getId().toString())) {
+        if (contact == null || !contact.getUserId().toString().equals(user.getId().toString())) {
             return "redirect:/user/show-contacts/0";
         }
         model.addAttribute("title", contact.getName() + "'s Contact Details");
@@ -107,4 +114,16 @@ public class UserController {
         return "normal/show_contact_details";
     }
 
+    @PostMapping("/delete-contact/{cID}")
+    public String deleteContact(@PathVariable("cID") ObjectId cID, Model model, HttpSession session, Principal principal) {
+        Contact contact = this.contactRepository.findByContactId(cID);
+        this.contactRepository.delete(contact);
+
+        User user = this.userRepository.findUserByEmail(principal.getName());
+        user.getContactIds().remove(cID);
+        this.userRepository.save(user);
+
+        session.setAttribute("message", new Message("Contact Deleted Successfully", "alert-success"));
+        return "redirect:/user/show-contacts/0";
+    }
 }

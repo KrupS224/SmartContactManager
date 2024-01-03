@@ -9,38 +9,51 @@
   <div class="card col-md-10 offset-md-1">
     <div class="card-body">
       <h1 class="text-center mb-3">Contact List</h1>
+      <div th:if="${noContacts}" class="text-center">
+        <p>No contacts available.</p>
+        <a th:href="@{/user/add-contact}" class="btn btn-outline-primary btn-md">Add Contacts now!!</a>
+      </div>
 
       <!-- Contact Card -->
-      <div class="card border-primary mb-3 col-md-10 offset-md-1" th:each="contact : ${contacts}">
+      <div th:unless="${noContacts}" class="card border-primary mb-3 col-md-10 offset-md-1"
+           th:each="contact : ${contacts}">
         <div class="row g-0">
           <div class="col-md-4 border-primary">
-            <img src="" th:src="@{${contact.image != null ? '/image/' + contact.image : 'https://www.seekpng.com/png/detail/966-9665493_my-profile-icon-blank-profile-image-circle.png'}}" style="width: 100%; height: auto;" class="img-fluid rounded-start card-img-top" alt="Contact Image">
+            <img src=""
+                 th:src="@{${contact.image != null ? '/image/' + contact.image : 'https://www.seekpng.com/png/detail/966-9665493_my-profile-icon-blank-profile-image-circle.png'}}"
+                 style="width: 100%; height: auto;" class="img-fluid rounded-start card-img-top" alt="Contact Image">
           </div>
           <div class="col-md-8 border-primary">
             <div class="card-body">
-              <h5 class="card-title" th:text="${contact.name + ' ' + (contact.secondName != null ? contact.secondName : '')}"></h5>
+              <h5 class="card-title"
+                  th:text="${contact.name + ' ' + (contact.secondName != null ? contact.secondName : '')}"></h5>
               <p class="card-text"></p>
               <p class="card-text" th:text="${contact.email}"></p>
               <p class="card-text" th:text="${contact.phone}"></p>
               <p class="card-text" th:text="${contact.work != '' ? 'Work: ' + contact.work : ''}"></p>
-              <p class="card-text" th:text="${contact.description != '' ? 'Description: ' + contact.description : ''}" style="font-style: italic; color: #555;"></p>
-              <button class="btn btn-danger btn-md">Delete</button>
-              <a th:href="@{'/user/contact/' + ${contact.contactId}}"><button class="btn btn-outline-primary btn-md">View Details</button></a>
+              <p class="card-text" th:text="${contact.description != '' ? 'Description: ' + contact.description : ''}"
+                 style="font-style: italic; color: #555;"></p>
+              <a th:attr="onclick=${'deleteContact('+ '''' + contact.contactId + '''' + ')'}"
+                 class="btn btn-danger btn-md">Delete</a>
+              <a th:href="@{'/user/contact/' + ${contact.contactId}}" class="btn btn-outline-primary btn-md">View
+                Details</a>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Pagination -->
-      <nav aria-label="Page navigation example">
+      <nav th:unless="${noContacts}" aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
           <li class="page-item" th:classappend="${page == 0} ? 'disabled' : ''">
             <a class="page-link" th:href="@{'/user/show-contacts/' + ${page-1}}" aria-label="Previous">
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
-          <li th:classappend="${page == i-1 ? 'active' : ''}" th:each="i : ${#numbers.sequence(1, totalPages)}" class="page-item"><a class="page-link" th:href="@{'/user/show-contacts/' + ${i-1}}" th:text="${i}"></a></li>
-          <li class="page-item" th:classappend="${page+1 != totalPages ? '' : 'disabled'}">
+          <li th:classappend="${page == i-1 ? 'active' : ''}" th:each="i : ${#numbers.sequence(1, totalPages+1)}"
+              class="page-item"><a class="page-link" th:href="@{'/user/show-contacts/' + ${i-1}}" th:text="${i}"></a>
+          </li>
+          <li class="page-item" th:classappend="${page == totalPages ? 'disabled' : ''}">
             <a class="page-link" th:href="@{'/user/show-contacts/' + ${page+1}}" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
             </a>
