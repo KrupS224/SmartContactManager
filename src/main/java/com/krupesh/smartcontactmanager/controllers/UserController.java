@@ -12,6 +12,9 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +35,8 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private ContactRepository contactRepository;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @ModelAttribute
     public void addCommonData(Model model, Principal principal) {
@@ -125,5 +130,52 @@ public class UserController {
 
         session.setAttribute("message", new Message("Contact Deleted Successfully", "alert-success"));
         return "redirect:/user/show-contacts/0";
+    }
+
+    @PostMapping("/update-contact/{cID}")
+    public String updateForm(@PathVariable("cID") ObjectId cID, Model model) {
+        model.addAttribute("title", "Update Contact Form");
+        Contact contact = this.contactRepository.findByContactId(cID);
+        model.addAttribute("contact", contact);
+        return "normal/update_form";
+    }
+
+    @PostMapping("/process-update/{cID}")
+    public String processUpdate(@PathVariable("cID") ObjectId cID, @ModelAttribute Contact contact, @RequestParam("profileImg") MultipartFile img, HttpSession session) {
+        try {
+            Contact oldContact = this.contactRepository.findByContactId(cID);
+            if(!img.isEmpty()) {
+//                Delete Old photo
+                if(oldContact.getImage() != null){
+                    File oldImg = new ClassPathResource("static/image").getFile();
+                    File deleteImg = new File(oldImg, oldContact.getImage());
+                    deleteImg.delete();
+                }
+
+//                Update New photo
+                File saveFile = new ClassPathResource("static/image").getFile();
+                Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + img.getOriginalFilename());
+                Files.copy(img.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                mongoTemplate.update(Contact.class)
+                        .matching(Criteria.where("contactId").is(cID))
+                        .apply(new Update().set("image", img.getOriginalFilename()))
+                        .first();
+            }
+
+            mongoTemplate.update(Contact.class)
+                    .matching(Criteria.where("contactId").is(cID))
+                    .apply(new Update().set("name", contact.getName())
+                            .set("secondName", contact.getSecondName())
+                            .set("work", contact.getWork())
+                            .set("email", contact.getEmail())
+                            .set("phone", contact.getPhone())
+                            .set("description", contact.getDescription()))
+                            .first();
+
+            session.setAttribute("message", new Message("Contact Updated Successfully", "alert-success"));
+        } catch (Exception e) {
+            e.printStackTrace();;
+        }
+        return "redirect:/user/contact/{cID}";
     }
 }
