@@ -1,7 +1,11 @@
 package com.krupesh.smartcontactmanager.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.krupesh.smartcontactmanager.config.ContactDeserializer;
+import com.krupesh.smartcontactmanager.config.ContactSerializer;
+import com.krupesh.smartcontactmanager.config.ObjectIdSerializer;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -19,6 +23,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 public class Contact {
     @Id
+//    @JsonSerialize(using = ContactSerializer.class)
+    @JsonDeserialize(using = ContactDeserializer.class)
+    @JsonSerialize(using = ObjectIdSerializer.class)
     private ObjectId contactId;
 
     @NotBlank(message = "Name cannot be blank")
@@ -45,4 +52,7 @@ public class Contact {
 
     @JsonBackReference
     private ObjectId userId;
+
+    public Contact(ObjectId objectId) {
+    }
 }

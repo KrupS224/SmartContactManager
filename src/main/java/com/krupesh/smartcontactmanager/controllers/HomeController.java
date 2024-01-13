@@ -61,7 +61,7 @@ public class HomeController {
             }
 
             user.setEnabled(true);
-            user.setRoll("USER");
+            user.setRole("USER");
             user.setPassword(passwordEncoder.encode(user.getPassword()));
 
             try {

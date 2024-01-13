@@ -99,3 +99,18 @@ body{
     font-size: 36px;
     cursor: pointer;
 }
+
+/* Search */
+.search-container {
+    position: relative;
+}
+
+.search-result {
+    position: absolute;
+    background: white;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid gray;
+    display: none;
+    z-index: 999999999999999999999999999999;
+}

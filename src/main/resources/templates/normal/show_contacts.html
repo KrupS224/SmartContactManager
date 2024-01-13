@@ -14,6 +14,14 @@
         <a th:href="@{/user/add-contact}" class="btn btn-outline-primary btn-md">Add Contacts now!!</a>
       </div>
 
+      <!-- Search -->
+      <div class="search-container mb-3 col-md-10 offset-md-1">
+        <input onkeyup="search()" type="text" name="search" id="search-input" class="form-control" placeholder="Search contacts...">
+        <div class="search-result">
+
+        </div>
+      </div>
+
       <!-- Contact Card -->
       <div th:unless="${noContacts}" class="card border-primary mb-3 col-md-10 offset-md-1"
            th:each="contact : ${contacts}">
@@ -31,8 +39,6 @@
               <p class="card-text" th:text="${contact.email}"></p>
               <p class="card-text" th:text="${contact.phone}"></p>
               <p class="card-text" th:text="${contact.work != '' ? 'Work: ' + contact.work : ''}"></p>
-              <p class="card-text" th:text="${contact.description != '' ? 'Description: ' + contact.description : ''}"
-                 style="font-style: italic; color: #555;"></p>
               <a th:attr="onclick=${'deleteContact('+ '''' + contact.contactId + '''' + ')'}"
                  class="btn btn-danger btn-md">Delete</a>
               <a th:href="@{'/user/contact/' + ${contact.contactId}}" class="btn btn-outline-primary btn-md">View

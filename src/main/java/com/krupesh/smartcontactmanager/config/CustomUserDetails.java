@@ -18,7 +18,7 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // If role is "USER" use below code, since simpleGrantedAuthority returns "ROLE_{actual role}"
-        String role = user.getRoll();
+        String role = user.getRole();
         String roleWithPrefix = "ROLE_" + role; // Add the "ROLE_" prefix
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(roleWithPrefix);
         return List.of(simpleGrantedAuthority);

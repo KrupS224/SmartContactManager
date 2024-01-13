@@ -6,9 +6,49 @@
 </head>
 <body>
 <section>
-  <h1>USERNAME: <span th:text="${user.name}"></span></h1>
-  <h1>EMAIL: <span th:text="${user.email}"></span></h1>
-  <h1><a th:href="@{/login?logout}">logout</a></h1>
+  <div class="container py-2">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card mb-4 h-100">
+          <div class="card-body text-center flex-column">
+            <img src=""
+                 th:src="@{${user.imgUrl != null ? '/image/' + user.image : 'https://www.seekpng.com/png/detail/966-9665493_my-profile-icon-blank-profile-image-circle.png'}}"
+                 alt="Profile Picture" class="rounded-circle img-fluid" style="width: 250px;">
+            <h5 class="my-3" th:text="${user.name}"></h5>
+            <div class="card-body mt-3">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Email</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0" th:text="${user.email}"></p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Role</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0" th:text="${user.role}"></p>
+                </div>
+              </div>
+              <hr>
+              <div class="row mb-3">
+                <div class="col-sm-3">
+                  <p class="mb-0">About You</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0"
+                     th:text="${user.about != '' ? user.about : 'No Data Available'}"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 </body>
 </html>

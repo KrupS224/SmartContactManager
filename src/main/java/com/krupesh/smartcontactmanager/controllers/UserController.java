@@ -174,7 +174,7 @@ public class UserController {
 
             session.setAttribute("message", new Message("Contact Updated Successfully", "alert-success"));
         } catch (Exception e) {
-            e.printStackTrace();;
+            e.printStackTrace();
         }
         return "redirect:/user/contact/{cID}";
     }

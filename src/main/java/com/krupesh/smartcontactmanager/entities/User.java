@@ -37,7 +37,7 @@ public class User {
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
-    private String roll;
+    private String role;
 
     private boolean enabled;
 
